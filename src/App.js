@@ -12,15 +12,36 @@ import "./styles.css";
 */
 
 export default function App() {
+  const [Simpsons, setSimpsons] = useState([]);
+
+  async function loadSimpsons() {
+    try {
+      const response = await fetch("https://rickandmortyapi.com/api/character");
+      const data = await response.json();
+      setSimpsons(data.results);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    console.log("Hello World");
+  }, [loadSimpsons]);
+
   return (
     <section>
       <HelloSomeone name="Mario" greeting="Hi" />
-      <HelloSomeone name="Luigi" greeting="Hello" hasDarkMode />
+      <HelloSomeone name="Luigi" greeting="Hello" hasDarkMode={true} />
       <HelloSomeone name="Bowser" greeting="Hey" />
     </section>
   );
 }
 
-const HelloSomeone = () => {
-  return <div></div>;
+const HelloSomeone = ({ name, greeting, hasDarkMode = false }) => {
+  return (
+    <div className={hasDarkMode ? "dark" : ""}>
+      {greeting}
+      {name === "Mario" ? "Boss" : name}
+    </div>
+  );
 };
